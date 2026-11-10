@@ -1,0 +1,50 @@
+# 依赖与运行时（本仓库刻意不用 node_modules，仍挡住误带）
+node_modules/
+.pnpm-store/
+.vite/
+dist/
+build/
+
+# 环境变量与密钥
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# agent 私有配置（不要上传各自的 agents.md / claude.md）
+agents.md
+claude.md
+.cursorrules
+.workbuddy-ai/
+.agent/
+
+# 真实数据与现场素材（赛制：只用脱敏或模拟数据）
+data/real/
+data/*-real.*
+data/*-raw.*
+*.xlsx
+*.docx
+*.pdf
+photos/
+现场*/
+
+# 录屏与大二进制（放网盘，别放仓库）
+*.mp4
+*.mov
+*.wav
+*.mp3
+*.m4a
+*.zip
+*.7z
+
+# 系统 / 编辑器
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.log
+*.tsbuildinfo
+coverage/
+playwright-report/
+test-results/
