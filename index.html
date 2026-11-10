@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>边测边报</title>
+<style>
+:root{--tx:#f3f3f5;--tx2:#a3a3ad;--tx3:#66666f;--line:rgba(255,255,255,.08);--lime:#c6f43f;
+  --sans:-apple-system,"SF Pro Text","PingFang SC","Helvetica Neue",sans-serif;--disp:"SF Pro Display",-apple-system,"PingFang SC",sans-serif;--mono:"SF Mono",ui-monospace,Menlo,monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{background:#08080a;color:var(--tx);font:15px/1.6 var(--sans);-webkit-font-smoothing:antialiased;display:flex;align-items:center;justify-content:center;padding:48px 24px}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(900px 500px at 50% 0%,rgba(198,244,63,.07),transparent 65%)}
+.w{position:relative;max-width:1040px;width:100%}
+.micro{font:500 11px/1.2 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--tx3)}
+h1{font:200 clamp(56px,8vw,96px)/1 var(--disp);letter-spacing:-.02em;margin:22px 0 18px}
+h1 b{font-weight:600;color:var(--lime)}
+.lead{font-size:18px;color:var(--tx2);max-width:640px}
+.cards{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;margin:48px 0 28px}
+a.card{display:block;text-decoration:none;color:inherit;border:1px solid var(--line);border-radius:20px;padding:30px 30px 26px;background:rgba(255,255,255,.02);transition:border-color .25s,transform .25s,background .25s;position:relative;overflow:hidden}
+a.card:hover{border-color:rgba(198,244,63,.45);transform:translateY(-2px);background:rgba(198,244,63,.03)}
+.card h2{font:600 24px/1.2 var(--disp);margin:14px 0 10px}
+.card p{color:var(--tx2);font-size:14px}
+.card .go{position:absolute;right:28px;top:28px;font:20px var(--mono);color:var(--tx3);transition:color .25s,transform .25s}
+a.card:hover .go{color:var(--lime);transform:translate(3px,-3px)}
+.card .f{margin-top:22px;font:12px var(--mono);color:var(--tx3)}
+.both{display:inline-flex;align-items:center;gap:10px;height:48px;padding:0 22px;border-radius:12px;background:var(--lime);color:#0a0a0b;font-weight:600;font-size:15px;border:0;cursor:pointer}
+.both:hover{filter:brightness(1.06)}
+.row{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.row span{color:var(--tx3);font-size:13px}
+.notes{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:48px;border-top:1px solid var(--line)}
+.notes div{padding:22px 24px 0 0}
+.notes div+div{padding-left:24px;border-left:1px solid var(--line)}
+.notes h3{font-size:14px;font-weight:600;margin:10px 0 6px}
+.notes p{font-size:13px;color:var(--tx2)}
+code{font:12.5px var(--mono);color:var(--lime);background:rgba(198,244,63,.08);padding:2px 6px;border-radius:5px}
+#lan{font:14px var(--mono);color:var(--lime)}
+@media (max-width:760px){.cards,.notes{grid-template-columns:1fr}.notes div+div{padding-left:0;border-left:0}}
+</style>
+</head>
+<body>
+<div class="w">
+  <div class="micro">Weihua × AI Hackathon · 13 号选题 · Voice QC</div>
+  <h1>边测边报<b>.</b></h1>
+  <p class="lead">起重机出厂检验的语音防错与追溯。质检员边测边报，系统当场回读、当场判定、当场拦错，每一个数都能回放原话。</p>
+
+  <div class="cards">
+    <a class="card" href="screen.html" target="_blank"><span class="micro">01 · Cockpit</span><span class="go">↗</span><h2>主管驾驶舱</h2><p>投影 / 大屏。实时识别管线、检验表、异常复核、证据追溯、整改与报告、验证看板。</p><div class="f">screen.html · 空格播放 · → 单步 · H 隐藏控制台</div></a>
+    <a class="card" href="phone.html" target="_blank"><span class="micro">02 · Inspector</span><span class="go">↗</span><h2>质检员手机端</h2><p>现场用。大字、语音回读、超差即时提醒、离线可用。</p><div class="f">phone.html · 点麦克风演示下一句</div></a>
+  </div>
+  <div class="row"><button class="both" id="both">同时打开两端 →</button><span>两个窗口自动联动：在任意一端操作，另一端实时同步。</span></div>
+
+  <div class="notes">
+    <div><span class="micro">同一台电脑</span><h3>直接双击打开</h3><p>大屏和手机端在同一个浏览器里打开即可联动，不需要网络。</p></div>
+    <div><span class="micro">真手机 + 投影</span><h3>运行 <code>node server.mjs</code></h3><p id="lanp">手机和电脑连同一 Wi-Fi 或热点，手机打开终端里打印的 <code>/phone.html</code> 地址。</p></div>
+    <div><span class="micro">接真实识别</span><h3><code>QCE.send({t:'utt', text})</code></h3><p>队友的 Whisper / FunASR 出文字后调用它，走同一条纠错 → 判定 → 回读管线。</p></div>
+  </div>
+</div>
+<script>
+document.getElementById('both').onclick=()=>{
+  const W=screen.availWidth, H=screen.availHeight;
+  window.open('screen.html','qc_screen',`left=0,top=0,width=${Math.round(W*.72)},height=${H}`);
+  window.open('phone.html','qc_phone',`left=${Math.round(W*.72)},top=0,width=${Math.round(W*.28)},height=${H}`);
+};
+if(/^https?:/.test(location.protocol)){
+  document.getElementById('lanp').innerHTML = `手机打开：<br><span id="lan">${location.protocol}//${location.host}/phone.html</span><br>（若 host 是 localhost，换成终端里打印的局域网地址）`;
+}
+</script>
+</body>
+</html>
